@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,15 +23,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String qrString = "Not Scanned !";
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
+    double width = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           "QR code Scanner",
         ),
       ),
-      body: Container(),
+      body: Container(
+        width: width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              qrString,
+              style: TextStyle(
+                fontSize: width * 0.04,
+                fontWeight: FontWeight.bold,
+              ),
+            )
+          ],
+        ),
+      ),
     );
+  }
+
+  Future<void> scanQr() async {
+    try {
+      FlutterBarcodeScanner.scanBarcode(
+          "#F44336", "cancel", true, ScanMode.BARCODE);
+    } catch (e) {
+      setState(() {
+        qrString = "unable to detect QR Code";
+      });
+    }
   }
 }
