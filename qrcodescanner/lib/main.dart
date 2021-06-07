@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
@@ -48,7 +46,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: width * 0.04,
                 fontWeight: FontWeight.bold,
               ),
-            )
+            ),
+            ElevatedButton(
+                onPressed: scanQr,
+                child: Text(
+                  "scan qr code",
+                ))
           ],
         ),
       ),
@@ -58,7 +61,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> scanQr() async {
     try {
       FlutterBarcodeScanner.scanBarcode(
-          "#F44336", "cancel", true, ScanMode.BARCODE);
+              "#F44336", "cancel", true, ScanMode.BARCODE)
+          .then((value) {
+        setState(() {
+          qrString = value;
+        });
+      });
     } catch (e) {
       setState(() {
         qrString = "unable to detect QR Code";
